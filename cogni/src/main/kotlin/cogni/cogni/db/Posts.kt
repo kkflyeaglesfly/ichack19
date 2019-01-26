@@ -4,8 +4,9 @@ import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
 object Posts {
-    var posts: List<Post> = listOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
-
+    var posts: List<Post> = listOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
+    //var posts: List<Post> = listOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
+    
     fun getPostById(id: Long) : Post? {
         return posts.find { post -> post.id == id}
     }
