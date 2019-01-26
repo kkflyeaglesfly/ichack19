@@ -5,7 +5,5 @@ data class User(
         val email: String,
         val name: String,
         val password: String,
-        val anonymity: Boolean,
-        val friends: MutableList<User>,
-        enum class userType {general, verified, admin}
+        val userType: UserType
 )
