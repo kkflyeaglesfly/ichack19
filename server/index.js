@@ -1,9 +1,9 @@
 var express = require('express');
 var http = require('http')
-var socketio = require('socket.io');
 var db = require('./db.js');
 var app = express();
 var server = http.Server(app);
+var socketio = require('socket.io');
 var websocket = socketio(server);
 server.listen(4000, () => console.log('listening on *:4000'));
 
@@ -58,7 +58,7 @@ function _sendExistingMessages(socket) {
 function sendExistingMessagesByChannel(socket, channel = 0) {
   var messages = db.getMessagesByChannel(channel);
   if (!messages.length) return;
-  socket.emit('message', messages.reverse());
+  socket.emit('message', messages);
 }
 
 // Save the message to the db and send all sockets but the sender.
@@ -71,5 +71,5 @@ function _sendAndSaveMessage(message, socket) {
   };
 
   db.insertMessage(messageData);
-  socket.emit('message', [message]);
+  websocket.emit('message', [messageData]);
 }

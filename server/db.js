@@ -44,6 +44,7 @@ function createUser(email, name) {
 
 function insertMessage(messageData) {
   messages.push(messageData);
+  console.log(messages);
 }
 
 function getMessagesByChannel(channel) {
