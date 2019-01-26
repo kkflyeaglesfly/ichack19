@@ -1,6 +1,8 @@
 package cogni.cogni.http
 
-data class LoginReq(
+import com.fasterxml.jackson.annotation.JsonCreator
+
+data class LoginReq @JsonCreator constructor(
         val email: String,
         val password: String
 )

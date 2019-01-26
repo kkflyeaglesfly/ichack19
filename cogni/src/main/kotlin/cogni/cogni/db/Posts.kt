@@ -10,7 +10,7 @@ object Posts {
         return posts.find { post -> post.id == id}
     }
 
-    fun reply(id: Long, reply: Reply) {
+    fun reply(id: Long, reply: Reply) : Int {
         var post: Post? = getPostById(id)
         if (post != null) {
             if (post.replies == null) {
@@ -18,17 +18,21 @@ object Posts {
             } else {
                 post.replies!!.add(reply)
             }
+            return 0
         }
+        return -1
     }
 
-    fun followup(id: Long, followup: String) {
-        var post: Post? = getPostById(id)
-        if (post != null) {
+    fun followup(userId: Long, id: Long, followup: String) : Int {
+        val post: Post? = getPostById(id)
+        if (post != null && post.userId == userId) {
             if (post.followUps == null) {
                 post.followUps = mutableListOf(followup)
             } else {
                 post.followUps!!.add(followup)
             }
+            return 0
         }
+        return -1
     }
 }

@@ -1,6 +1,8 @@
 package cogni.cogni.http
 
-data class FollowupReq (
+import com.fasterxml.jackson.annotation.JsonCreator
+
+data class FollowupReq @JsonCreator constructor(
         val postId: Long,
         val userId: Long,
         val body: String
