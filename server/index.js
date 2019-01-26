@@ -1,10 +1,11 @@
 var express = require('express');
 var http = require('http')
 var socketio = require('socket.io');
-var mongojs = require('mongojs');
+//var mongojs = require('mongojs');
 
 var ObjectID = mongojs.ObjectID;
-var db = mongojs(process.env.MONGO_URL || 'mongodb://localhost:27017/local');
+import db from 'database/db.js'
+//var db = mongojs(process.env.MONGO_URL || 'mongodb://localhost:27017/local');
 var app = express();
 var server = http.Server(app);
 var websocket = socketio(server);
@@ -30,11 +31,10 @@ function onUserJoined(userId, socket) {
   try {
     // The userId is null for new users.
     if (!userId) {
-      var user = db.collection('users').insert({}, (err, user) => {
-        socket.emit('userJoined', user._id);
-        users[socket.id] = user._id;
-        _sendExistingMessages(socket);
-      });
+      var user = db.insertUser(user);
+      socket.emit('userJoined', user._id);
+      users[socket.id] = user._id;
+      sendExistingMessages(socket);
     } else {
       users[socket.id] = userId;
       _sendExistingMessages(socket);
