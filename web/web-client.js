@@ -11,7 +11,7 @@ io.on('connection', function(socket){
     socket.on('chat message', function(msg){
         io.emit('chat message', msg);
     });
-});GIT
+});
 
 http.listen(port, function(){
     console.log('listening on *:' + port);
