@@ -1,5 +1,8 @@
 package cogni.cogni.db
 
+import java.io.File
+import java.io.InputStream
+
 import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
@@ -12,15 +15,25 @@ object Posts {
 
     fun reply(id: Long, reply: Reply): Int {
         var post: Post? = getPostById(id)
-        if (post != null) {
-            if (post.replies == null) {
-                post.replies = mutableListOf(reply)
-            } else {
-                post.replies!!.add(reply)
+        if (profanityCheck(reply)) {
+            if (post != null) {
+                if (post.replies == null) {
+                    post.replies = mutableListOf(reply)
+                } else {
+                    post.replies!!.add(reply)
+                }
+                return 0
             }
-            return 0
         }
         return -1
+    }
+
+    // Iterate through the textfile using inputstream
+    fun profanityCheck(reply: Reply): Boolean {
+        var inputStream: InputStream = File("profanityList.txt").inputStream()
+        var words = inputStream.readBytes().toString(Charset.defaultCharset())
+
+        return true
     }
 
     fun followup(userId: Long, id: Long, followup: String): Int {
