@@ -20,4 +20,15 @@ object Posts {
             }
         }
     }
+
+    fun followup(id: Long, followup: String) {
+        var post: Post? = getPostById(id)
+        if (post != null) {
+            if (post.followUps == null) {
+                post.followUps = mutableListOf(followup)
+            } else {
+                post.followUps!!.add(followup)
+            }
+        }
+    }
 }
