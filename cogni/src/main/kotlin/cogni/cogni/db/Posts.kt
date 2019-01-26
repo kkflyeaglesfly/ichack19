@@ -7,8 +7,8 @@ import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
 object Posts {
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
-    //var posts: List<Post> = listOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
+//    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
     
     fun getPostById(id: Long) : Post? {
         return posts.find { post -> post.id == id}
@@ -16,26 +16,34 @@ object Posts {
 
     fun reply(id: Long, reply: Reply): Int {
         var post: Post? = getPostById(id)
-        if (profanityCheck(reply)) {
-            if (post != null) {
-                if (post.replies == null) {
-                    post.replies = mutableListOf(reply)
-                } else {
-                    post.replies!!.add(reply)
-                }
-                return 0
+//        if (hasProfanity(reply)) {
+//            if (post != null) {
+//                if (post.replies == null) {
+//                    post.replies = mutableListOf(reply)
+//                } else {
+//                    post.replies!!.add(reply)
+//                }
+//                return 0
+//            }
+//        }
+        if (post != null) {
+            if (post.replies == null) {
+                post.replies = mutableListOf(reply)
+            } else {
+                post.replies!!.add(reply)
             }
+            return 0
         }
         return -1
     }
 
     // Iterate through the textfile using inputstream
-    fun profanityCheck(reply: Reply): Boolean {
-        var inputStream: InputStream = File("profanityList.txt").inputStream()
-        var words = inputStream.readBytes().toString(Charset.defaultCharset())
-
-        return true
-    }
+//    fun hasProfanity(reply: Reply): Boolean {
+//        var inputStream: InputStream = File("profanityList.txt").inputStream()
+//        var words = inputStream.readBytes().toString(Charset.defaultCharset())
+//
+//        return false
+//    }
 
     fun followup(userId: Long, id: Long, followup: String): Int {
         val post: Post? = getPostById(id)
