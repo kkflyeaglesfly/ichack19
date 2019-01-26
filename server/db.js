@@ -1,20 +1,23 @@
-var db = {
-  users : [{userId: user1}],
-    messages : {}
+var db = function(){
+    //users: [{userid, name, email}[],
+    //messages: [{text, user, createdAt, chatId}]
+    var userList = {};
+    var messageList = {};
+
 };
 
 function getUserWithId(userId) {
-    return ...
+    return db.users[userId];
 }
 
 function insertUser(user){
-    //set user._id
-    //add to map
-    return user._id
+     if (!getUserWithId()){
+        db.userList.push(user);
+        user._id = users.length;
+    }
 }
 
-function insertMessages(messageData) {
-
+function insertMessage(messageData) {
+    db.messageList.push(messageData);
 }
-
-export {getUserWithId}
+export {getUserWithId, insertMessage, insertUser}

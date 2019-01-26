@@ -75,11 +75,11 @@ function _sendAndSaveMessage(message, socket, fromServer) {
     chatId: chatId
   };
 
-  db.collection('messages').insert(messageData, (err, message) => {
-    // If the message is from the server, then send to everyone.
-    var emitter = fromServer ? websocket : socket.broadcast;
-    emitter.emit('message', [message]);
-  });
+
+  db.insertMessage(messageData);
+  var emitter = fromServer ? websocket : socket.broadcast;
+  emitter.emit('message', [message]);
+
 }
 
 // Allow the server to participate in the chatroom through stdin.
