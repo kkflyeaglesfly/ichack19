@@ -22,4 +22,17 @@ object Users {
         users.add(user)
         return user
     }
+
+    fun isValidUserId(userId : Long) : Boolean {
+        if (userId < 0){
+            return false
+        }
+
+        for (u in users){
+            if (u.id == userId){
+                return true
+            }
+        }
+        return false
+    }
 }
