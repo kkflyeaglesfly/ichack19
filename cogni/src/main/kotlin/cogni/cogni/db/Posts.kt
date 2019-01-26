@@ -1,8 +1,5 @@
 package cogni.cogni.db
 
-import java.io.File
-import java.io.InputStream
-
 import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
