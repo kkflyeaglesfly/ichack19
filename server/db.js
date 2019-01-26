@@ -7,13 +7,13 @@ var db = function(){
 };
 
 function getUserWithId(userId) {
-    return db.users[userId];
+    return db.userList[userId];
 }
 
 function insertUser(user){
      if (!getUserWithId()){
         db.userList.push(user);
-        user._id = users.length;
+        user._id = userList.length;
     }
 }
 

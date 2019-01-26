@@ -18,7 +18,7 @@ class Main extends React.Component {
     this.onSend = this.onSend.bind(this);
     this._storeMessages = this._storeMessages.bind(this);
 
-    this.socket = SocketIOClient('http://localhost:3000');
+    this.socket = SocketIOClient('http://localhost:4000');
     this.socket.on('message', this.onReceivedMessage);
     this.determineUser();
   }
