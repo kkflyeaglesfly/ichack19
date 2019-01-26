@@ -11,4 +11,8 @@ class PostController {
     fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
             "Hello, $name"
 
+    @GetMapping("/post")
+    fun getPost(@RequestParam(value = "postId") postId: Int) {
+
+    }
 }
