@@ -7,7 +7,8 @@
     "test": "jest",
     "ios": "react-native run-ios",
     "android": "react-native run-android",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "web-client": "node web/web-client.js"
   },
   "dependencies": {
     "express": "^4.14.0",
