@@ -24,10 +24,11 @@
 <script>
     $(function () {
         // var socket = io();
+        var channel = 0;
         const socket = io('http://localhost:4000');
-        socket.emit('userJoined', "sam@cogni.com", "Sam Liem");
+        socket.emit('userJoined', 0);
         $('form').submit(function() {
-            socket.emit('message', $('#m').val());
+            socket.emit('message', $('#m').val(), channel);
             $('#m').val('');
             return false;
         });

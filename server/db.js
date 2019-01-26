@@ -5,28 +5,35 @@ const ROLES = {
 }
 
 var users = [{
+  userId: 0,
+  password: "password",
   role: ROLES.ADMIN,
   email: "sam@cogni.com",
   name: "Sam Liem"
 }];
 
 var messages = [{
-  text: "message text 1",
-  user: {
-    role: ROLES.ADMIN,
-    email: "sam@cogni.com",
-    name: "Sam Liem"
-  },
+  text: "Welcome!",
+  user: users[0].userId,
   createdAt: Date.now(),
   channel: 0
 }];
+
+function signIn(email, password) {
+  var userId = -1;
+  var user = user.filter((u) => u.email == email && u.password == password);
+  if (user.length == 1) {
+    return user.userId;
+  }
+  return userId;
+}
 
 function existsUser(email) {
   return users.some((u) => u.email == email);
 }
 
-function getUser(email) {
-  return users.filter((u) => u.email == email)[0];
+function getUserWithId(userId) {
+  return users.filter((u) => u.userId == userId)[0];
 }
 
 function createUser(email, name) {
@@ -36,6 +43,7 @@ function createUser(email, name) {
       role: ROLES.USER,
       email: email,
       name: name,
+      userId: users.length
     };
     users.push(user);
   }
@@ -44,7 +52,6 @@ function createUser(email, name) {
 
 function insertMessage(messageData) {
   messages.push(messageData);
-  console.log(messages);
 }
 
 function getMessagesByChannel(channel) {
@@ -54,8 +61,9 @@ function getMessagesByChannel(channel) {
 }
 
 module.exports = {
-  getUser,
+  signIn,
   existsUser,
+  getUserWithId,
   createUser,
   insertMessage,
   getMessagesByChannel
