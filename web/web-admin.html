@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Cogni Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+        #messages { margin-bottom: 40px }
+        .member {
+            background-color: #696969;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .member:hover, .member:focus {
+            background-color: #2980B9;
+        }
+
+        .member-settings {
+            position:absolute;
+            transition: .5s ease;
+            top: 50%;
+            left: 25%;
+            display: inline-block;
+        }
+
+        .channel {
+            background-color: #696969;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .channel:hover, .channel:focus {
+            background-color: #2980B9;
+        }
+
+        .channel-settings {
+            position:absolute;
+            transition: .5s ease;
+            top: 50%;
+            left: 55%;
+            display: inline-block;
+        }
+
+        .show {display: block;}
+    </style>
+</head>
+<body>
+<ul id="messages"></ul>
+
+<div class="member-settings">
+    <button onclick="moveToMemberEdit()" class="member">Member Management</button>
+</div>
+
+<div class="channel-settings">
+    <button onclick="myFunction()" class="channel">Channel Management</button>
+</div>
+
+
+<script>
+
+    function moveToMemberEdit() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
