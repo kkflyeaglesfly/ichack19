@@ -1,13 +1,9 @@
 var express = require('express');
 var http = require('http')
-var socketio = require('socket.io');
-//var mongojs = require('mongojs');
-
-var ObjectID = mongojs.ObjectID;
-import db from 'database/db.js'
-//var db = mongojs(process.env.MONGO_URL || 'mongodb://localhost:27017/local');
+var db = require('./db.js');
 var app = express();
 var server = http.Server(app);
+var socketio = require('socket.io');
 var websocket = socketio(server);
 server.listen(4000, () => console.log('listening on *:4000'));
 
@@ -17,77 +13,63 @@ var users = {};
 
 // This represents a unique chatroom.
 // For this example purpose, there is only one chatroom;
-var chatId = 1;
+var chatId = 0;
 
 websocket.on('connection', (socket) => {
-    clients[socket.id] = socket;
-    socket.on('userJoined', (userId) => onUserJoined(userId, socket));
-    socket.on('message', (message) => onMessageReceived(message, socket));
+  clients[socket.id] = socket;
+  socket.on('userJoined', (email, name) => onUserJoined(email, name, socket));
+  socket.on('message', (message) => onMessageReceived(message, socket));
 });
 
 // Event listeners.
 // When a user joins the chatroom.
-function onUserJoined(userId, socket) {
-  try {
-    // The userId is null for new users.
-    if (!userId) {
-      var user = db.insertUser(user);
-      socket.emit('userJoined', user._id);
-      users[socket.id] = user._id;
-      sendExistingMessages(socket);
-    } else {
-      users[socket.id] = userId;
-      _sendExistingMessages(socket);
-    }
-  } catch(err) {
-    console.err(err);
+function onUserJoined(email, name, socket) {
+  var user;
+  if (!db.existsUser(email)) {
+    user = db.createUser(email, name);
+    socket.emit('userJoined', user);
+  } else {
+    user = db.getUser(email);
   }
+  users[socket.id] = user;
+  _sendExistingMessages(socket);
 }
 
 // When a user sends a message in the chatroom.
-function onMessageReceived(message, senderSocket) {
-  var userId = users[senderSocket.id];
+function onMessageReceived(text, senderSocket) {
+  var user = users[senderSocket.id];
   // Safety check.
-  if (!userId) return;
+  if (!user) return;
 
-  _sendAndSaveMessage(message, senderSocket);
+  _sendAndSaveMessage({
+    text: text,
+    user: user,
+    createdAt: Date.now(),
+    channel: 0
+  }, senderSocket);
 }
 
 // Helper functions.
 // Send the pre-existing messages to the user that just joined.
 function _sendExistingMessages(socket) {
-  var messages = db.collection('messages')
-    .find({ chatId })
-    .sort({ createdAt: 1 })
-    .toArray((err, messages) => {
-      // If there aren't any messages, then return.
-      if (!messages.length) return;
-      socket.emit('message', messages.reverse());
-  });
+  sendExistingMessagesByChannel(socket, 0);
+}
+
+function sendExistingMessagesByChannel(socket, channel = 0) {
+  var messages = db.getMessagesByChannel(channel);
+  if (!messages.length) return;
+  socket.emit('message', messages);
 }
 
 // Save the message to the db and send all sockets but the sender.
-function _sendAndSaveMessage(message, socket, fromServer) {
+function _sendAndSaveMessage(message, socket) {
   var messageData = {
     text: message.text,
     user: message.user,
-    createdAt: new Date(message.createdAt),
-    chatId: chatId
+    createdAt: message.createdAt,
+    channel: 0
   };
 
-
   db.insertMessage(messageData);
-  var emitter = fromServer ? websocket : socket.broadcast;
-  emitter.emit('message', [message]);
-
+  websocket.emit('message', [messageData]);
 }
-
-// Allow the server to participate in the chatroom through stdin.
-var stdin = process.openStdin();
-stdin.addListener('data', function(d) {
-  _sendAndSaveMessage({
-    text: d.toString().trim(),
-    createdAt: new Date(),
-    user: { _id: 'robot' }
-  }, null /* no socket */, true /* send from server */);
-});
