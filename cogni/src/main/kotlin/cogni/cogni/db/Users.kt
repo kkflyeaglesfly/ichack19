@@ -17,4 +17,8 @@ object Users {
         val user: User = User(users.size.toLong(), email, name, password)
         return user
     }
+
+    fun addFriend(user: User) {
+        if (user.)
+    }
 }
