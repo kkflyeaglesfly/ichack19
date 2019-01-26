@@ -2,6 +2,7 @@ package cogni.cogni
 
 import cogni.cogni.db.Posts
 import cogni.cogni.http.FollowupReq
+import cogni.cogni.http.PostRes
 import cogni.cogni.http.ReplyReq
 import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.*
 class PostController {
 
     @GetMapping("/post")
-    fun getPost(@RequestParam(value = "postId") postId: Long) =
-            Posts.getPostById(postId)
+    fun getPost(@RequestParam(value = "postId") postId: Long, @RequestParam(value = "userId") userId: Long) {
+        Posts.getPostById(postId)
+//        return PostRes()
+    }
+
 
     @PostMapping("/reply")
     fun reply(@RequestBody replyReq: ReplyReq) {
