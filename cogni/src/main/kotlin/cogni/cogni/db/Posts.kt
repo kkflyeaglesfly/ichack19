@@ -7,10 +7,11 @@ import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
 object Posts {
-    var posts = mutableListOf<Post>(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
-
-    fun getPostById(id: Long): Post? {
-        return posts.find { post -> post.id == id }
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
+    //var posts: List<Post> = listOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
+    
+    fun getPostById(id: Long) : Post? {
+        return posts.find { post -> post.id == id}
     }
 
     fun reply(id: Long, reply: Reply): Int {
@@ -51,7 +52,7 @@ object Posts {
 
     fun createPost(newPost: Post): Int {
         if (Users.isValidUserId(newPost.userId)) {
-            Posts.posts.add(newPost)
+            posts.add(newPost)
             return 0
         }
         return -1
