@@ -43,9 +43,9 @@ class PostController {
             }
             name = owner.name + "(anon to strangers)"
         } else {
-            if (post.replies!!.size > 0) {
+            if (post.replies.size > 0) {
                 val reader : User = Users.getUserById(userId)!!
-                for (reply in post.replies!!) {
+                for (reply in post.replies) {
                     if (reply.userId == userId) {
                         replies.add(reply.copy(name = reader.name))
                     } else {

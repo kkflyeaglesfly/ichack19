@@ -11,10 +11,10 @@ object Posts {
         return posts.find { post -> post.id == id}
     }
 
-    fun reply(id: Long, reply: Reply): Int {
-        val post: Post? = getPostById(id)
+    fun reply(postId: Long, userId: Long, body: String): Int {
+        val post: Post? = getPostById(postId)
         if (post != null) {
-            post.replies.add(reply)
+            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body, 0, 0))
             return 0
         }
         return -1
