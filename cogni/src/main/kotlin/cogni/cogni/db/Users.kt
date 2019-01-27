@@ -10,6 +10,14 @@ object Users {
             User(1, "dhru@cogni.com", "Dhru Devalia", "trustno1", UserType.ADMIN, mutableListOf(), 1000)
     )
 
+    fun userIfAdmin(userId: Long) : User? {
+        val user = getUserById(userId)
+        if (user != null && user.userType == UserType.ADMIN) {
+            return user
+        }
+        return null
+    }
+
     fun getUserByEmailPassword(email: String, password: String): User? {
         return users.find { user -> user.email == email && user.password == password }
     }

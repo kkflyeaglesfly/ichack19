@@ -7,5 +7,6 @@ data class Reply(
         val body: String,
         val reports: MutableList<User>,
         val upvotes: MutableList<User>,
-        val downvotes: MutableList<User>
+        val downvotes: MutableList<User>,
+        var removed: Boolean = false
 )

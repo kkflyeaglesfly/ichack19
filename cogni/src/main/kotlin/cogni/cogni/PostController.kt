@@ -15,7 +15,7 @@ class PostController {
     fun getPosts(@RequestParam(value = "userId") userId: Long) : GetPostsRes {
         return GetPostsRes(Posts.posts.sortedWith(Comparator{ a, b ->
             a.upvotes.size - b.upvotes.size
-        }).reversed().map { p -> getPostMapper(p, userId) })
+        }).reversed().filter { p -> !p.removed } .map { p -> getPostMapper(p, userId) })
     }
 
     @GetMapping("/post")
@@ -45,12 +45,15 @@ class PostController {
         if (isOwner) {
             if (post.replies.size > 0) {
                 for (reply in post.replies) {
-                    if (isAFriend(post.friends, reply.userId)) {
-                        val friend = Users.getUserById(reply.userId)!!
-                        replies.add(reply.copy(name = friend.name + " " + friend.email))
-                    } else {
-                        replies.add(reply)
+                    if (!reply.removed) {
+                        if (isAFriend(post.friends, reply.userId)) {
+                            val friend = Users.getUserById(reply.userId)!!
+                            replies.add(reply.copy(name = friend.name + " " + friend.email))
+                        } else {
+                            replies.add(reply)
+                        }
                     }
+
                 }
             }
             name = owner.name + "(anon to strangers)"
@@ -58,11 +61,14 @@ class PostController {
             if (post.replies.size > 0) {
                 val reader : User = Users.getUserById(userId)!!
                 for (reply in post.replies) {
-                    if (reply.userId == userId) {
-                        replies.add(reply.copy(name = reader.name))
-                    } else {
-                        replies.add(reply)
+                    if (!reply.removed) {
+                        if (reply.userId == userId) {
+                            replies.add(reply.copy(name = reader.name))
+                        } else {
+                            replies.add(reply)
+                        }
                     }
+
                 }
             }
             if (isAFriend(post.friends, userId)) {
