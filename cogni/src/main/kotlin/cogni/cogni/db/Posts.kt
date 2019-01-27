@@ -9,7 +9,16 @@ object Posts {
     val POST_REPORT_MAX : Int = 50
     val REPLY_REPORT_MAX : Int = 25
 
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, "Welcome to Cogni!", "thanks i'm cured", PostCategory.SUCCESS))
+    var posts: MutableList<Post> = mutableListOf(
+            Post(0, 0, "Welcome to Cogni!", "thanks i'm cured", PostCategory.SUCCESS,
+                    replies = mutableListOf(Reply(0, 1, "drew", "congrats"))),
+            Post(1, 1, "Study Techniques", "i'm having some difficulty studying", PostCategory.STUDY),
+            Post(2, 2, "feeling unwell", "been throwing up", PostCategory.EATING),
+            Post(3, 0, "Am i fat", "think i'm fay", PostCategory.BODYDYSMORPHIA),
+            Post(4, 1, "Sad", "can't get out of bed", PostCategory.DEPRESSION,
+                    replies = mutableListOf(
+                            Reply(0, 0, "drew", "congrats"),
+                            Reply(1, 2, "max", "get up"))))
 
     fun getPostById(id: Long) : Post? {
         return posts.find { post : Post -> post.id == id}
