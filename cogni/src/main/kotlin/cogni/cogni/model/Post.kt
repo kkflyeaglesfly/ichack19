@@ -9,6 +9,5 @@ data class Post(
         var followUps: MutableList<String>,
         var replies: MutableList<Reply>,
         val friends: MutableList<User>,
-
         val reports: MutableList<User>
 )

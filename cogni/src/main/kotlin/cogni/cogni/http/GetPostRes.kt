@@ -12,5 +12,6 @@ data class GetPostRes (
         val body: String,
         var followUps: List<String>,
         var replies: List<Reply>,
-        var friends: List<User>
+        var friends: List<User>,
+        var reports : List<User>
 )

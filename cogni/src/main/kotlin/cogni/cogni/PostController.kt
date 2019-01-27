@@ -70,12 +70,13 @@ class PostController {
             }
         }
 
-        return GetPostRes(post.id, post.userId, name, post.upvotes.size, post.title, post.body, post.followUps, replies, post.friends)
+        return GetPostRes(post.id, post.userId, name, post.upvotes.size, post.title, post.body, post.followUps, replies, post.friends, post.reports)
     }
 
     @RequestMapping(value = ["/reply"], method = arrayOf(RequestMethod.POST))
     fun reply(@RequestBody replyReq: ReplyReq) : Res {
         return Res(Posts.reply(replyReq.postId, replyReq.userId, replyReq.body))
+
     }
 
     @RequestMapping(value = ["/followup"], method = arrayOf(RequestMethod.POST))
@@ -85,10 +86,31 @@ class PostController {
 
     @PostMapping("/post")
     fun createPost(@RequestBody createPostReq: CreatePostReq): Res {
-        val newPost = Post(Posts.getUniqueId(), createPostReq.userId, mutableListOf(), createPostReq.title,
+        val newPost = Post(Posts.getUniqueId().toLong(), createPostReq.userId, mutableListOf(), createPostReq.title,
                 createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
         return Res(Posts.createPost(newPost))
     }
+
+    @PostMapping("/post/upvote")
+    fun upvotePost(@RequestBody postReq: PostReq) : Res {
+        Posts.upvotePost(postReq.postId, postReq.userId)
+        return Res(0)
+    }
+
+    @PostMapping("/reply/upvote")
+    fun upvoteReply(@RequestBody replyVoteReq: ReplyVoteReq) : Res {
+        Posts.upvoteReply(replyVoteReq.replyId, replyVoteReq.userId)
+        return Res(0)
+    }
+
+    @PostMapping("/reply/downvote")
+    fun downvoteReply(@RequestBody replyVoteReq: ReplyVoteReq) : Res {
+        Posts.downVoteReply(replyVoteReq.replyId, replyVoteReq.userId)
+        return Res(0)
+    }
+
+
+
 
 
 }

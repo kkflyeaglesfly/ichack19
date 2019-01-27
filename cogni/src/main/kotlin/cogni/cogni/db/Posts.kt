@@ -2,23 +2,26 @@ package cogni.cogni.db
 
 import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
+import cogni.cogni.model.User
 
 object Posts {
 
     val POST_REPORT_MAX : Int = 50
     val REPLY_REPORT_MAX : Int = 25
 
-    //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1)), mutableListOf()))
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, mutableListOf(), "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf()))
-    
+
+    //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1))))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, mutableListOf(), "Welcome to Cogni!", "thanks i'm cured", mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf()))
+
     fun getPostById(id: Long) : Post? {
-        return posts.find { post -> post.id == id}
+        return posts.find { post : Post -> post.id == id}
     }
 
     fun reply(postId: Long, userId: Long, body: String): Int {
         val post: Post? = getPostById(postId)
         if (post != null) {
-            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body, 0, mutableListOf()))
+
+            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body, mutableListOf(), mutableListOf(), mutableListOf()))
             return 0
         }
         return -1
@@ -93,13 +96,53 @@ object Posts {
         posts.remove(getPostById(postId))
     }
 
-    fun upvote(postId: Long, userId : Long){
+    fun upvotePost(postId: Long, userId : Long){
         val post : Post = getPostById(postId)!!
         if (post.upvotes.contains(Users.getUserById(userId))){
             post.upvotes.remove(Users.getUserById(userId))
         } else {
             post.upvotes.add(Users.getUserById(userId)!!)
         }
+
+        //change karma to reflect decision
+    }
+
+    fun upvoteReply(replyId: Long, userId: Long){
+        var reply : Reply = getReplyFromReplyId(replyId)
+
+        if (reply.downvotes.contains(Users.getUserById(userId))){
+            reply.downvotes.remove(Users.getUserById(userId))
+            reply.upvotes.add(Users.getUserById(userId)!!)
+            return
+        }
+        if (reply.upvotes.contains(Users.getUserById(userId))){
+            reply.upvotes.remove(Users.getUserById(userId))
+        } else {
+            reply.upvotes.add(Users.getUserById(userId)!!)
+        }
+        //change karma to reflect decision
+
+    }
+
+    private fun getReplyFromReplyId(replyId: Long): Reply {
+        return posts[0].replies[0]
+    }
+
+    fun downVoteReply(replyId: Long, userId: Long){
+        var reply : Reply = getReplyFromReplyId(replyId)
+
+        if(reply.upvotes.contains(Users.getUserById(userId))){
+            reply.upvotes.remove(Users.getUserById(userId))
+            reply.downvotes.add(Users.getUserById(userId)!!)
+            return
+        }
+
+        if (reply.downvotes.contains(Users.getUserById(userId))){
+            reply.downvotes.remove(Users.getUserById(userId))
+        } else {
+            reply.downvotes.add(Users.getUserById(userId)!!)
+        }
+        //change karma to reflect decision
 
     }
 }
