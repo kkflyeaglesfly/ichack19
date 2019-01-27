@@ -13,8 +13,8 @@ class PostController {
 
     @GetMapping("/posts")
     fun getPosts(@RequestParam(value = "userId") userId: Long) : GetPostsRes {
-
-        return GetPostsRes(Posts.posts.sortedWith(compareBy(Post::upvotes)).reversed().map { p -> getPostMapper(p, userId) })
+        return GetPostsRes(Posts.posts.map { p -> getPostMapper(p, userId) })
+        //return GetPostsRes(Posts.posts.sortedWith(Comparator{a, b -> a.upvotes.size - b.upvotes.size}.reversed().map { p -> getPostMapper(p, userId) }))
     }
 
     @GetMapping("/post")
@@ -78,6 +78,27 @@ class PostController {
                 createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf())
         return Res(Posts.createPost(newPost))
     }
+
+    @PostMapping("/post/upvote")
+    fun upvotePost(@RequestBody postReq: PostReq) : Res {
+        Posts.upvotePost(postReq.postId, postReq.userId)
+        return Res(0)
+    }
+
+    @PostMapping("/reply/upvote")
+    fun upvoteReply(@RequestBody replyVoteReq: ReplyVoteReq) : Res {
+        Posts.upvoteReply(replyVoteReq.replyId, replyVoteReq.userId)
+        return Res(0)
+    }
+
+    @PostMapping("/reply/downvote")
+    fun downvoteReply(@RequestBody replyVoteReq: ReplyVoteReq) : Res {
+        Posts.downVoteReply(replyVoteReq.replyId, replyVoteReq.userId)
+        return Res(0)
+    }
+
+
+
 
 
 }

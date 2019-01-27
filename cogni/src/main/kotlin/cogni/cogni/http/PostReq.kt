@@ -1,6 +1,6 @@
 package cogni.cogni.http
 
-data class PostRes(
+data class PostReq(
         val userId: Long,
-        val res: Int
+        val postId: Long
 )

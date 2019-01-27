@@ -2,6 +2,7 @@ package cogni.cogni.db
 
 import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
+import cogni.cogni.model.User
 
 object Posts {
     //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1))))
@@ -65,7 +66,14 @@ object Posts {
         //change karma to reflect decision
     }
 
-    fun upvoteReply(reply: Reply, userId: Long){
+    fun upvoteReply(replyId: Long, userId: Long){
+        var reply : Reply = getReplyFromReplyId(replyId)
+
+        if (reply.downvotes.contains(Users.getUserById(userId))){
+            reply.downvotes.remove(Users.getUserById(userId))
+            reply.upvotes.add(Users.getUserById(userId)!!)
+            return
+        }
         if (reply.upvotes.contains(Users.getUserById(userId))){
             reply.upvotes.remove(Users.getUserById(userId))
         } else {
@@ -75,7 +83,19 @@ object Posts {
 
     }
 
-    fun downVoteReply(reply: Reply, userId: Long){
+    private fun getReplyFromReplyId(replyId: Long): Reply {
+        return posts[0].replies[0]
+    }
+
+    fun downVoteReply(replyId: Long, userId: Long){
+        var reply : Reply = getReplyFromReplyId(replyId)
+
+        if(reply.upvotes.contains(Users.getUserById(userId))){
+            reply.upvotes.remove(Users.getUserById(userId))
+            reply.downvotes.add(Users.getUserById(userId)!!)
+            return
+        }
+
         if (reply.downvotes.contains(Users.getUserById(userId))){
             reply.downvotes.remove(Users.getUserById(userId))
         } else {
