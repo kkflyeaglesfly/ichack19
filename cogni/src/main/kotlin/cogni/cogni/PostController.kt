@@ -99,13 +99,13 @@ class PostController {
 
     @PostMapping("/reply/upvote")
     fun upvoteReply(@RequestBody replyVoteReq: ReplyVoteReq) : Res {
-        Posts.upvoteReply(replyVoteReq.replyId, replyVoteReq.userId)
+        Posts.upvoteReply(replyVoteReq.replyId, replyVoteReq.userId, Posts.getPostById(replyVoteReq.postId)!!)
         return Res(0)
     }
 
     @PostMapping("/reply/downvote")
     fun downvoteReply(@RequestBody replyVoteReq: ReplyVoteReq) : Res {
-        Posts.downVoteReply(replyVoteReq.replyId, replyVoteReq.userId)
+        Posts.downVoteReply(replyVoteReq.replyId, replyVoteReq.userId, Posts.getPostById(replyVoteReq.postId)!!)
         return Res(0)
     }
 

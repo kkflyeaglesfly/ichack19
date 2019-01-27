@@ -99,7 +99,8 @@ object Posts {
 
 
     fun removePost(postId : Long){
-        posts.remove(getPostById(postId))
+        //mark post as removed
+        //posts.remove(getPostById(postId))
     }
 
     fun upvotePost(postId: Long, userId : Long){
@@ -113,8 +114,8 @@ object Posts {
         Users.karma(post.userId, 10)
     }
 
-    fun upvoteReply(replyId: Long, userId: Long){
-        var reply : Reply = getReplyFromReplyId(replyId)
+    fun upvoteReply(replyId: Long, userId: Long, post: Post){
+        var reply : Reply = getReplyById(post, replyId)!!
 
         if (reply.downvotes.contains(Users.getUserById(userId))){
             reply.downvotes.remove(Users.getUserById(userId))
@@ -131,12 +132,8 @@ object Posts {
 
     }
 
-    private fun getReplyFromReplyId(replyId: Long): Reply {
-        return posts[0].replies[0]
-    }
-
-    fun downVoteReply(replyId: Long, userId: Long){
-        var reply : Reply = getReplyFromReplyId(replyId)
+    fun downVoteReply(replyId: Long, userId: Long, post: Post){
+        var reply : Reply = getReplyById(post, replyId)!!
 
         if(reply.upvotes.contains(Users.getUserById(userId))){
             reply.upvotes.remove(Users.getUserById(userId))
