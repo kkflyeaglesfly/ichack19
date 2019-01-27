@@ -61,6 +61,8 @@ object Posts {
         } else {
             post.upvotes.add(Users.getUserById(userId)!!)
         }
+
+        //change karma to reflect decision
     }
 
     fun upvoteReply(reply: Reply, userId: Long){
@@ -69,6 +71,8 @@ object Posts {
         } else {
             reply.upvotes.add(Users.getUserById(userId)!!)
         }
+        //change karma to reflect decision
+
     }
 
     fun downVoteReply(reply: Reply, userId: Long){
@@ -77,5 +81,7 @@ object Posts {
         } else {
             reply.downvotes.add(Users.getUserById(userId)!!)
         }
+        //change karma to reflect decision
+
     }
 }
