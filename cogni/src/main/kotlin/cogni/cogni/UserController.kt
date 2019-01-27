@@ -22,7 +22,7 @@ class UserController {
         val user: User? = Users.getUserByEmailPassword(loginReq.email, loginReq.password)
         if (user != null)
             return LoginRes(user.id, user.userType == UserType.ADMIN, 0)
-        return LoginRes(-1, user.userType == UserType.ADMIN, -1)
+        return LoginRes(-1, false, -1)
     }
 
     @PostMapping("/friend/poster")
