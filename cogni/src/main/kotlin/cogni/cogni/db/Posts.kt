@@ -40,7 +40,10 @@ object Posts {
                 reply.reports.add(downvoter)
                 if (reply.reports.size >= REPLY_REPORT_MAX) {
                     // mark reply invis
-                    // lower karma for user
+                    for (reporter in reply.reports) {
+                        Users.karma(reporter, 25)
+                    }
+                    Users.karma(reply.userId, -100)
                 }
                 return 0
             }
@@ -72,7 +75,10 @@ object Posts {
             post.reports.add(downvoter)
             if (post.reports.size >= POST_REPORT_MAX) {
                 // mark post invis
-                // lower karma for user
+                for (reporter in post.reports) {
+                    Users.karma(reporter, 25)
+                }
+                Users.karma(post.userId, -75)
             }
             return 0
         }
@@ -103,8 +109,8 @@ object Posts {
         } else {
             post.upvotes.add(Users.getUserById(userId)!!)
         }
-
-        //change karma to reflect decision
+        Users.karma(userId, 3)
+        Users.karma(post.userId, 10)
     }
 
     fun upvoteReply(replyId: Long, userId: Long){
@@ -120,7 +126,8 @@ object Posts {
         } else {
             reply.upvotes.add(Users.getUserById(userId)!!)
         }
-        //change karma to reflect decision
+        Users.karma(userId, 5)
+        Users.karma(reply.userId, 20)
 
     }
 
@@ -142,7 +149,7 @@ object Posts {
         } else {
             reply.downvotes.add(Users.getUserById(userId)!!)
         }
-        //change karma to reflect decision
-
+        Users.karma(userId, 25)
+        Users.karma(reply.userId, -25)
     }
 }

@@ -6,8 +6,8 @@ import cogni.cogni.model.UserType
 
 object Users {
     var users: MutableList<User> = mutableListOf(
-            User(0, "sam@cogni.com", "Sam Liem", "donald", UserType.ADMIN, mutableListOf()),
-            User(1, "dhru@cogni.com", "Dhru Devalia", "trustno1", UserType.ADMIN, mutableListOf())
+            User(0, "sam@cogni.com", "Sam Liem", "donald", UserType.ADMIN, mutableListOf(), 1000),
+            User(1, "dhru@cogni.com", "Dhru Devalia", "trustno1", UserType.ADMIN, mutableListOf(), 1000)
     )
 
     fun getUserByEmailPassword(email: String, password: String): User? {
@@ -18,8 +18,21 @@ object Users {
         return users.find { user -> user.id == id }
     }
 
+    fun karma(id: Long, k: Int): Int {
+        val user: User? = getUserById(id)
+        if (user != null) {
+           return karma(user, k)
+        }
+        return -1
+    }
+
+    fun karma(user: User, k: Int): Int {
+        user.karma += k
+        return 0
+    }
+
     fun createUser(email: String, name: String, password: String, type: UserType = UserType.GENERAL): User {
-        val user = User(users.size.toLong(), email, name, password, type, mutableListOf())
+        val user = User(users.size.toLong(), email, name, password, type, mutableListOf(), 0)
         users.add(user)
         return user
     }
