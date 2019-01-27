@@ -34,8 +34,8 @@ class PostController {
             if (post.replies.size > 0) {
                 for (reply in post.replies) {
                     if (isAFriend(post.friends, reply.userId)) {
-                        val friend = Users.getUserById(reply.userId)
-                        replies.add(reply.copy(name = friend!!.name))
+                        val friend = Users.getUserById(reply.userId)!!
+                        replies.add(reply.copy(name = friend.name + " " + friend.email))
                     } else {
                         replies.add(reply)
                     }
@@ -54,7 +54,7 @@ class PostController {
                 }
             }
             if (isAFriend(post.friends, userId)) {
-                name = owner.name + "(anon to strangers)"
+                name = owner.name + " " + owner.email + "(anon to strangers)"
             }
         }
 
