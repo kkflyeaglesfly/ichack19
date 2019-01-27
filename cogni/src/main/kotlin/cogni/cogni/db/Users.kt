@@ -6,8 +6,9 @@ import cogni.cogni.model.UserType
 
 object Users {
     var users: MutableList<User> = mutableListOf(
-            User(0, "sam@cogni.com", "Sam Liem", "donald", UserType.ADMIN, mutableListOf(), 1000),
-            User(1, "dhru@cogni.com", "Dhru Devalia", "trustno1", UserType.ADMIN, mutableListOf(), 1000)
+            User(0, "sam@cogni.com", "Sam Liem", "donald", UserType.ADMIN, karma = 1000),
+            User(1, "dhru@cogni.com", "Dhru Devalia", "trustno1", UserType.ADMIN, karma = 1000),
+            User(2, "max@cogni.com", "Max Taylor-Davies", "bunnyFukka", UserType.ADMIN, karma = 1000)
     )
 
     fun userIfAdmin(userId: Long) : User? {

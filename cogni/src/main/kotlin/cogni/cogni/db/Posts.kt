@@ -9,9 +9,7 @@ object Posts {
     val POST_REPORT_MAX : Int = 50
     val REPLY_REPORT_MAX : Int = 25
 
-
-    //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1))))
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, mutableListOf(), "Welcome to Cogni!", "thanks i'm cured", mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), PostCategory.SUCCESS))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, "Welcome to Cogni!", "thanks i'm cured", PostCategory.SUCCESS))
 
     fun getPostById(id: Long) : Post? {
         return posts.find { post : Post -> post.id == id}
@@ -24,7 +22,7 @@ object Posts {
     fun reply(postId: Long, userId: Long, body: String): Int {
         val post: Post? = getPostById(postId)
         if (post != null && !post.locked) {
-            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body, mutableListOf(), mutableListOf(), mutableListOf()))
+            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body))
             return 0
         }
         return -1

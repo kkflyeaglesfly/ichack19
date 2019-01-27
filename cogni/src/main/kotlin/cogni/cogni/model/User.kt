@@ -5,7 +5,7 @@ data class User(
         val email: String,
         val name: String,
         val password: String,
-        val userType: UserType,
-        val friendRequests : MutableList<FriendRequest>,
-        var karma: Int
+        val userType: UserType = UserType.GENERAL,
+        val friendRequests : MutableList<FriendRequest> = mutableListOf(),
+        var karma: Int = 100
 )

@@ -100,8 +100,7 @@ class PostController {
 
     @PostMapping("/post")
     fun createPost(@RequestBody createPostReq: CreatePostReq): Res {
-        val newPost = Post(Posts.getUniqueId().toLong(), createPostReq.userId, mutableListOf(), createPostReq.title,
-                createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), createPostReq.category)
+        val newPost = Post(Posts.getUniqueId(), createPostReq.userId, createPostReq.title, createPostReq.body, createPostReq.category)
         return Res(Posts.createPost(newPost))
     }
 

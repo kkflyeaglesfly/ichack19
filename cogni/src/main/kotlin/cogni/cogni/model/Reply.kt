@@ -5,8 +5,8 @@ data class Reply(
         val userId: Long,
         val name: String,
         val body: String,
-        val reports: MutableList<User>,
-        val upvotes: MutableList<User>,
-        val downvotes: MutableList<User>,
-        var removed: Boolean = false
+        var removed: Boolean = false,
+        val reports: MutableList<User> = mutableListOf(),
+        val upvotes: MutableList<User> = mutableListOf(),
+        val downvotes: MutableList<User> = mutableListOf()
 )
