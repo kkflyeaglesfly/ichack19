@@ -1,6 +1,7 @@
 package cogni.cogni.http
 
 import cogni.cogni.model.Reply
+import cogni.cogni.model.User
 
 data class GetPostRes (
         val postId: Long,
@@ -10,5 +11,6 @@ data class GetPostRes (
         val title: String,
         val body: String,
         var followUps: List<String>?,
-        var replies: List<Reply>?
+        var replies: List<Reply>?,
+        var friends: List<User>?
 )

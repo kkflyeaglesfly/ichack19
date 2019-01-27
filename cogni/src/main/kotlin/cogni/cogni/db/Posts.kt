@@ -4,8 +4,8 @@ import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
 object Posts {
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
-    //var posts: List<Post> = listOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
+    //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
     
     fun getPostById(id: Long) : Post? {
         return posts.find { post -> post.id == id}
@@ -48,4 +48,16 @@ object Posts {
     fun getUniqueId(): Long {
         return Users.users.size.toLong()
     }
+
+    fun containsReplier(userid : Long, postId : Long) : Boolean{
+        var post = getPostById(postId)!!
+        var replies = post.replies
+        for (reply in post.replies!!){
+            if (reply.userId == userid){
+                return true
+            }
+        }
+        return false
+    }
+
 }

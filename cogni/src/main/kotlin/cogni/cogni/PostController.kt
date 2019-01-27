@@ -53,7 +53,7 @@ class PostController {
             }
         }
 
-        return GetPostRes(post.id, post.userId, name, post.upvotes, post.title, post.body, post.followUps, replies)
+        return GetPostRes(post.id, post.userId, name, post.upvotes, post.title, post.body, post.followUps, replies, post.friends)
     }
 
     @RequestMapping(value = ["/reply"], method = arrayOf(RequestMethod.POST))
