@@ -13,6 +13,7 @@ class PostController {
 
     @GetMapping("/posts")
     fun getPosts(@RequestParam(value = "userId") userId: Long) : GetPostsRes {
+
         return GetPostsRes(Posts.posts.sortedWith(compareBy(Post::upvotes)).reversed().map { p -> getPostMapper(p, userId) })
     }
 
@@ -63,8 +64,7 @@ class PostController {
 
     @RequestMapping(value = ["/reply"], method = arrayOf(RequestMethod.POST))
     fun reply(@RequestBody replyReq: ReplyReq) : Res {
-        val reply = Reply(replyReq.userId, "anon", replyReq.body, 0, 0)
-        return Res(Posts.reply(replyReq.postId, reply))
+        return Res(Posts.reply(replyReq.postId, replyReq.postId, replyReq.body))
     }
 
     @RequestMapping(value = ["/followup"], method = arrayOf(RequestMethod.POST))
@@ -74,7 +74,7 @@ class PostController {
 
     @PostMapping("/post")
     fun createPost(@RequestBody createPostReq: CreatePostReq): Res {
-        val newPost = Post(Posts.getUniqueId().toLong(), createPostReq.userId, 0, createPostReq.title,
+        val newPost = Post(Posts.getUniqueId().toLong(), createPostReq.userId, 0, mutableListOf(), createPostReq.title,
                 createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf())
         return Res(Posts.createPost(newPost))
     }

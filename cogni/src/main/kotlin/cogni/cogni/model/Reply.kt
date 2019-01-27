@@ -5,6 +5,7 @@ data class Reply(
         val userId: Long,
         val name: String,
         val body: String,
-        val upvotes: Int,
+        val upvotes: MutableList<User>,
+        val downvotes: MutableList<User>,
         val reports: Int
 )

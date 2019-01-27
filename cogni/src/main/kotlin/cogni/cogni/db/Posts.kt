@@ -5,16 +5,16 @@ import cogni.cogni.model.Reply
 
 object Posts {
     //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1))))
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf()))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 0, mutableListOf(), "Welcome to Cogni!", "thanks i'm cured", mutableListOf(), mutableListOf(), mutableListOf()))
     
     fun getPostById(id: Long) : Post? {
-        return posts.find { post -> post.id == id}
+        return posts.find { post : Post -> post.id == id}
     }
 
     fun reply(postId: Long, userId: Long, body: String): Int {
         val post: Post? = getPostById(postId)
         if (post != null) {
-            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body, 0, 0))
+            post.replies.add(Reply(post.replies.size.toLong(), userId, "anon", body, mutableListOf(), mutableListOf(), 0))
             return 0
         }
         return -1
@@ -54,13 +54,28 @@ object Posts {
         posts.remove(getPostById(postId))
     }
 
-    fun upvote(postId: Long, userId : Long){
+    fun upvotePost(postId: Long, userId : Long){
         val post : Post = getPostById(postId)!!
         if (post.upvotes.contains(Users.getUserById(userId))){
             post.upvotes.remove(Users.getUserById(userId))
         } else {
             post.upvotes.add(Users.getUserById(userId)!!)
         }
+    }
 
+    fun upvoteReply(reply: Reply, userId: Long){
+        if (reply.upvotes.contains(Users.getUserById(userId))){
+            reply.upvotes.remove(Users.getUserById(userId))
+        } else {
+            reply.upvotes.add(Users.getUserById(userId)!!)
+        }
+    }
+
+    fun downVoteReply(reply: Reply, userId: Long){
+        if (reply.downvotes.contains(Users.getUserById(userId))){
+            reply.downvotes.remove(Users.getUserById(userId))
+        } else {
+            reply.downvotes.add(Users.getUserById(userId)!!)
+        }
     }
 }
