@@ -49,4 +49,18 @@ object Posts {
         return false
     }
 
+
+    fun removePost(postId : Long){
+        posts.remove(getPostById(postId))
+    }
+
+    fun upvote(postId: Long, userId : Long){
+        val post : Post = getPostById(postId)!!
+        if (post.upvotes.contains(Users.getUserById(userId))){
+            post.upvotes.remove(Users.getUserById(userId))
+        } else {
+            post.upvotes.add(Users.getUserById(userId)!!)
+        }
+
+    }
 }
