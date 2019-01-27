@@ -4,8 +4,7 @@ import cogni.cogni.model.FriendRequest
 import cogni.cogni.model.FriendRequestStatus
 
 object FriendRequests {
-    //var friendRequests = mutableListOf(FriendRequest(0, 1, 0))
-    var friendRequests = mutableListOf<FriendRequest>()
+    var friendRequests : MutableList<FriendRequest> = ArrayList()
 
     fun acceptStatus(friendRequest: FriendRequest) : Int {
         if (!friendRequests.contains(friendRequest)){

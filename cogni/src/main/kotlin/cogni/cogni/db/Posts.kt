@@ -13,6 +13,16 @@ object Posts {
 
     fun reply(id: Long, reply: Reply): Int {
         var post: Post? = getPostById(id)
+//        if (hasProfanity(reply)) {
+//            if (post != null) {
+//                if (post.replies == null) {
+//                    post.replies = mutableListOf(reply)
+//                } else {
+//                    post.replies!!.add(reply)
+//                }
+//                return 0
+//            }
+//        }
         if (post != null) {
             if (post.replies == null) {
                 post.replies = mutableListOf(reply)
@@ -23,6 +33,14 @@ object Posts {
         }
         return -1
     }
+
+    // Iterate through the textfile using inputstream
+//    fun hasProfanity(reply: Reply): Boolean {
+//        var inputStream: InputStream = File("profanityList.txt").inputStream()
+//        var words = inputStream.readBytes().toString(Charset.defaultCharset())
+//
+//        return false
+//    }
 
     fun followup(userId: Long, id: Long, followup: String): Int {
         val post: Post? = getPostById(id)

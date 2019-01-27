@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class PostController {
 
+    @GetMapping("/posts")
+    fun getPosts(@RequestParam(value = "userId") userId: Long) : GetPostsRes {
+        return GetPostsRes(Posts.posts.sortedWith(compareBy(Post::upvotes)).reversed().map { p -> getPostMapper(p, userId) })
+    }
+
     @GetMapping("/post")
     fun getPost(@RequestParam(value = "postId") postId: Long, @RequestParam(value = "userId") userId: Long) : GetPostRes {
         return getPostMapper(Posts.getPostById(postId)!!, userId)
