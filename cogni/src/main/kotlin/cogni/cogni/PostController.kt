@@ -4,6 +4,7 @@ import cogni.cogni.db.Posts
 import cogni.cogni.db.Users
 import cogni.cogni.http.*
 import cogni.cogni.model.Post
+import cogni.cogni.model.PostCategory
 import cogni.cogni.model.Reply
 import cogni.cogni.model.User
 import org.springframework.web.bind.annotation.*
@@ -22,6 +23,13 @@ class PostController {
     fun getPost(@RequestParam(value = "postId") postId: Long, @RequestParam(value = "userId") userId: Long) : GetPostRes {
         return getPostMapper(Posts.getPostById(postId)!!, userId)
     }
+
+   @GetMapping("/post/category")
+   fun getPostByCategory(@RequestParam(value = "category") category: Int, @RequestParam(value = "userId") userId: Long) : GetPostsRes {
+       return GetPostsRes(Posts.getPostFilter(PostCategory.values()[category]).sortedWith(Comparator{ a, b ->
+           a.upvotes.size - b.upvotes.size
+       }).reversed().map { p -> getPostMapper(p, userId) })
+   }
 
     @PostMapping("/post/report")
     fun reportPost(@RequestBody reportPostReq: ReportPostReq): Res {
