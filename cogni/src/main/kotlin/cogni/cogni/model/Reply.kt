@@ -6,5 +6,5 @@ data class Reply(
         val name: String,
         val body: String,
         val upvotes: Int,
-        val reports: Int
+        val reports: MutableList<User>
 )

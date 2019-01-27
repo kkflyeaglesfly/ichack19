@@ -13,12 +13,24 @@ class PostController {
 
     @GetMapping("/posts")
     fun getPosts(@RequestParam(value = "userId") userId: Long) : GetPostsRes {
-        return GetPostsRes(Posts.posts.sortedWith(compareBy(Post::upvotes)).reversed().map { p -> getPostMapper(p, userId) })
+        return GetPostsRes(Posts.posts.sortedWith(Comparator{ a, b ->
+            a.upvotes.size - b.upvotes.size
+        }).reversed().map { p -> getPostMapper(p, userId) })
     }
 
     @GetMapping("/post")
     fun getPost(@RequestParam(value = "postId") postId: Long, @RequestParam(value = "userId") userId: Long) : GetPostRes {
         return getPostMapper(Posts.getPostById(postId)!!, userId)
+    }
+
+    @PostMapping("/post/report")
+    fun reportPost(@RequestBody reportPostReq: ReportPostReq): Res {
+        return Res(Posts.reportPost(reportPostReq.postId, reportPostReq.userId))
+    }
+
+    @PostMapping("/reply/report")
+    fun reportReply(@RequestBody reportReplyReq: ReportReplyReq): Res {
+        return Res(Posts.reportReply(reportReplyReq.postId, reportReplyReq.replyId, reportReplyReq.userId))
     }
 
     fun isAFriend(friends: List<User>, friendId: Long) =
@@ -58,13 +70,12 @@ class PostController {
             }
         }
 
-        return GetPostRes(post.id, post.userId, name, post.upvotes, post.title, post.body, post.followUps, replies, post.friends)
+        return GetPostRes(post.id, post.userId, name, post.upvotes.size, post.title, post.body, post.followUps, replies, post.friends)
     }
 
     @RequestMapping(value = ["/reply"], method = arrayOf(RequestMethod.POST))
     fun reply(@RequestBody replyReq: ReplyReq) : Res {
-        val reply = Reply(replyReq.userId, "anon", replyReq.body, 0, 0)
-        return Res(Posts.reply(replyReq.postId, reply))
+        return Res(Posts.reply(replyReq.postId, replyReq.userId, replyReq.body))
     }
 
     @RequestMapping(value = ["/followup"], method = arrayOf(RequestMethod.POST))
@@ -74,8 +85,8 @@ class PostController {
 
     @PostMapping("/post")
     fun createPost(@RequestBody createPostReq: CreatePostReq): Res {
-        val newPost = Post(Posts.getUniqueId().toLong(), createPostReq.userId, 0, createPostReq.title,
-                createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf())
+        val newPost = Post(Posts.getUniqueId(), createPostReq.userId, mutableListOf(), createPostReq.title,
+                createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
         return Res(Posts.createPost(newPost))
     }
 
