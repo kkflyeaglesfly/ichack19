@@ -1,6 +1,7 @@
 package cogni.cogni.db
 
 import cogni.cogni.model.Post
+import cogni.cogni.model.PostCategory
 import cogni.cogni.model.Reply
 import cogni.cogni.model.User
 
@@ -11,10 +12,14 @@ object Posts {
 
 
     //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1))))
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, mutableListOf(), "Welcome to Cogni!", "thanks i'm cured", mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf()))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, mutableListOf(), "Welcome to Cogni!", "thanks i'm cured", mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), PostCategory.SUCCESS))
 
     fun getPostById(id: Long) : Post? {
         return posts.find { post : Post -> post.id == id}
+    }
+
+    fun getPostFilter(category: PostCategory) : List<Post>{
+        return posts.filter { a -> a.category == category}
     }
 
     fun reply(postId: Long, userId: Long, body: String): Int {
