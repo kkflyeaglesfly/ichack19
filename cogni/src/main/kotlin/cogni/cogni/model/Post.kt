@@ -6,7 +6,7 @@ data class Post(
         val upvotes: Int,
         val title: String,
         val body: String,
-        var followUps: MutableList<String>?,
-        var replies: MutableList<Reply>?,
-        val friends: MutableList<User>?
+        var followUps: MutableList<String>,
+        var replies: MutableList<Reply>,
+        val friends: MutableList<User>
 )

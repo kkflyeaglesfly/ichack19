@@ -4,52 +4,26 @@ import cogni.cogni.model.Post
 import cogni.cogni.model.Reply
 
 object Posts {
-    //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, mutableListOf(Users.users.get(1))))
-    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", null, null, null))
+    //var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf(Users.users.get(1))))
+    var posts: MutableList<Post> = mutableListOf(Post(0, 0, 100, "Welcome", "Welcome to Cogni!", mutableListOf(), mutableListOf(), mutableListOf()))
     
     fun getPostById(id: Long) : Post? {
         return posts.find { post -> post.id == id}
     }
 
     fun reply(id: Long, reply: Reply): Int {
-        var post: Post? = getPostById(id)
-//        if (hasProfanity(reply)) {
-//            if (post != null) {
-//                if (post.replies == null) {
-//                    post.replies = mutableListOf(reply)
-//                } else {
-//                    post.replies!!.add(reply)
-//                }
-//                return 0
-//            }
-//        }
+        val post: Post? = getPostById(id)
         if (post != null) {
-            if (post.replies == null) {
-                post.replies = mutableListOf(reply)
-            } else {
-                post.replies!!.add(reply)
-            }
+            post.replies.add(reply)
             return 0
         }
         return -1
     }
 
-    // Iterate through the textfile using inputstream
-//    fun hasProfanity(reply: Reply): Boolean {
-//        var inputStream: InputStream = File("profanityList.txt").inputStream()
-//        var words = inputStream.readBytes().toString(Charset.defaultCharset())
-//
-//        return false
-//    }
-
     fun followup(userId: Long, id: Long, followup: String): Int {
         val post: Post? = getPostById(id)
         if (post != null && post.userId == userId) {
-            if (post.followUps == null) {
-                post.followUps = mutableListOf(followup)
-            } else {
-                post.followUps!!.add(followup)
-            }
+            post.followUps.add(followup)
             return 0
         }
         return -1
@@ -67,13 +41,10 @@ object Posts {
         return Users.users.size.toLong()
     }
 
-    fun containsReplier(userid : Long, postId : Long) : Boolean{
-        var post = getPostById(postId)!!
-        var replies = post.replies
-        for (reply in post.replies!!){
-            if (reply.userId == userid){
-                return true
-            }
+    fun containsReplyFrom(postId: Long, userId: Long): Boolean {
+        val post = getPostById(postId)
+        if (post != null) {
+            return post.replies.any { reply -> reply.userId == userId }
         }
         return false
     }

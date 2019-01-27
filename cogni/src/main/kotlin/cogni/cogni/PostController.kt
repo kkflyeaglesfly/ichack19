@@ -31,9 +31,9 @@ class PostController {
         var name = "anon"
         var replies : MutableList<Reply> = ArrayList()
         if (isOwner) {
-            if (post.replies != null && post.replies!!.size > 0) {
-                for (reply in post.replies!!) {
-                    if (post.friends != null && isAFriend(post.friends, reply.userId)) {
+            if (post.replies.size > 0) {
+                for (reply in post.replies) {
+                    if (isAFriend(post.friends, reply.userId)) {
                         val friend = Users.getUserById(reply.userId)
                         replies.add(reply.copy(name = friend!!.name))
                     } else {
@@ -43,7 +43,7 @@ class PostController {
             }
             name = owner.name + "(anon to strangers)"
         } else {
-            if (post.replies != null && post.replies!!.size > 0) {
+            if (post.replies!!.size > 0) {
                 val reader : User = Users.getUserById(userId)!!
                 for (reply in post.replies!!) {
                     if (reply.userId == userId) {
@@ -53,7 +53,7 @@ class PostController {
                     }
                 }
             }
-            if (post.friends != null && isAFriend(post.friends, userId)) {
+            if (isAFriend(post.friends, userId)) {
                 name = owner.name + "(anon to strangers)"
             }
         }
@@ -75,7 +75,7 @@ class PostController {
     @PostMapping("/post")
     fun createPost(@RequestBody createPostReq: CreatePostReq): Res {
         val newPost = Post(Posts.getUniqueId().toLong(), createPostReq.userId, 0, createPostReq.title,
-                createPostReq.body, mutableListOf<String>(), mutableListOf<Reply>(), mutableListOf<User>())
+                createPostReq.body, mutableListOf(), mutableListOf(), mutableListOf())
         return Res(Posts.createPost(newPost))
     }
 

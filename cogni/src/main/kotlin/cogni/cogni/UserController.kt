@@ -1,9 +1,9 @@
 package cogni.cogni
 
+import cogni.cogni.db.Posts
 import cogni.cogni.db.Users
-import cogni.cogni.http.CreateUserReq
-import cogni.cogni.http.LoginReq
-import cogni.cogni.http.LoginRes
+import cogni.cogni.http.*
+import cogni.cogni.model.FriendRequest
 import cogni.cogni.model.User
 import org.springframework.web.bind.annotation.*
 
@@ -22,5 +22,32 @@ class UserController {
         if (user != null)
             return LoginRes(user.id, 0)
         return LoginRes(-1, -1)
+    }
+
+    @PostMapping("/friend/poster")
+    fun friendRequest(@RequestBody friendReq : FriendReq): Res {
+        if (Posts.containsReplyFrom(friendReq.postId, friendReq.toUserId)) {
+            return Res(Users.friendRequest(friendReq.fromUserId, friendReq.toUserId, friendReq.postId))
+        }
+
+        return Res(-1)
+    }
+
+    @PostMapping("/friend/replier")
+    fun sendRequestByReplier(@RequestBody friendReq : FriendReq): Res {
+        if (Posts.containsReplyFrom(friendReq.postId, friendReq.fromUserId)) {
+            return Res(Users.friendRequest(friendReq.fromUserId, friendReq.toUserId, friendReq.postId))
+        }
+        return Res(-1)
+    }
+
+    @PostMapping("/friend/accept")
+    fun acceptRequest(@RequestBody friendReq : FriendReq) : Res {
+        return Res(Users.acceptFriend(friendReq.fromUserId, friendReq.toUserId, friendReq.postId))
+    }
+
+    @PostMapping("/friend/reject")
+    fun rejectRequest(@RequestBody friendReq : FriendReq) : Res {
+        return Res(Users.rejectFriend(friendReq.fromUserId, friendReq.toUserId, friendReq.postId))
     }
 }
